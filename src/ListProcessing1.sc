@@ -1,10 +1,39 @@
 object ListProcessing1 {
   // problem 1, 2, 3, 6, 7, 8, 10, 13
+  // problem 1,2,6,7,8 implement 4 versions:
+  // iterative, recursive, tail-recursive, map-filter-reduce
 
 
   // problem 1
-
-  // tests:
+  // A function that computes the sum of cubes of all odd
+  // numbers occurring in a list of integers
+  // iterative version
+  def sumOfOddCubesIter(nums: List[Int]) = {
+    var result = 0
+    for (i <- nums if i % 2 != 0) result += i * i * i
+    result
+  }
+  // recursive version
+  def sumOfOddCubesRecur(nums: List[Int]) : Int = {
+    if (nums == Nil) 0
+    else if (nums.head % 2 != 0)
+      nums.head * nums.head * nums.head + sumOfOddCubesRecur(nums.tail)
+    else sumOfOddCubesRecur(nums.tail)
+    }
+  }
+  // tail-recursive version
+  def sumOfOddCubesTailRecur(nums: List[Int]) = {
+    def helper(result: Int, unseen: List[Int]) : Int = {
+      if (unseen == Nil) result
+      else helper(result + unseen.head * unseen.head * unseen.head, unseen.tail)
+    }
+    helper(0, nums)
+  }
+  // map-filter-reduce version
+  def isOdd(n: Int) = if (n % 2 != 0) true else false
+  def sumOfOddCubesMapReduceFilter(nums: List[Int])
+  = nums.filter(isOdd _).map()
+    // tests:
   //**************
 
   // problem 2
