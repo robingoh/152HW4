@@ -44,8 +44,50 @@ object ListProcessing1 {
   //**************
 
   // problem 2
+  // A function that computes the sum of numbers in
+  // a list of lists of numbers.
+  // iterative version
+  def sumOfSumsIter(listOfLists: List[List[Int]]) = {
+    var result = 0
+    for (list <- listOfLists)
+      for (num <- list)
+        result += num
+    result
+  }
+  // recursive version
+  def sumOfSumsRecur(listOfLists: List[List[Int]]) : Int = {
+    if (listOfLists == Nil) 0
+    else {
+      if (listOfLists.head == Nil) sumOfSumsRecur(listOfLists.tail)
+      else listOfLists.head.head + sumOfSumsRecur(listOfLists.head.tail::listOfLists.tail)
+    }
+  }
 
+  // tail-recursive version
+  def sumOfSumsTailRecur(listOfLists: List[List[Int]]) = {
+    def helper(result: Int, unseen: List[List[Int]]) : Int = {
+      if (unseen == Nil) result
+      else if (unseen.head == Nil) helper(result, unseen.tail)
+      else helper(result + unseen.head.head, unseen.head.tail::unseen.tail)
+    }
+    helper(0, listOfLists)
+  }
+  // map-filter-reduce version
+  def sumAllNumInAList(list: List[Int]) = {
+    var sum = 0
+    for (num <- list) sum += num
+    sum
+  }
+  def sumOfSumsMapFilterReduce(listOfLists: List[List[Int]]) = {
+    listOfLists.map(sumAllNumInAList _).reduce(sum _)
+  }
   // tests:
+  val listOfListsToTest = List( List(1, 2, 3), List(4, 5, 6) )
+  sumOfSumsIter(listOfListsToTest)
+  sumOfSumsRecur(listOfListsToTest)
+  sumOfSumsTailRecur(listOfListsToTest)
+  sumOfSumsMapFilterReduce(listOfListsToTest)
+
   //**************
 
   // problem 3
