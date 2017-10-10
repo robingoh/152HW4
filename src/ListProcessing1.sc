@@ -19,7 +19,7 @@ object ListProcessing1 {
     else if (nums.head % 2 != 0)
       nums.head * nums.head * nums.head + sumOfOddCubesRecur(nums.tail)
     else sumOfOddCubesRecur(nums.tail)
-    }
+  }
   // tail-recursive version
   def sumOfOddCubesTailRecur(nums: List[Int]) = {
     def helper(result: Int, unseen: List[Int]) : Int = {
@@ -154,11 +154,11 @@ object ListProcessing1 {
     result
   }
   // recursive version
-  // ** the intuitive recursive version is the same as the tail-recursive version
-  // ** since the problem requires a recursive version, I have done something
+  // ** The intuitive recursive version is the same as the tail-recursive version.
+  // ** Since the problem requires a recursive version, I have done something
   // ** to differentiate the recursive and the tail-recursive version. But in the
   // ** end, allRecur and allTailRecur are both tail-recursive functions.
-  // ** In other words, no recursive version of problem 7 is found.
+  // ** In other words, no "true" recursive version of problem 7 is found.
   def allRecur[T](test: T=>Boolean, vals: List[T]) : Boolean = {
     if (vals == Nil) true
     else test(vals.head) && allRecur(test, vals.tail)
@@ -205,14 +205,63 @@ object ListProcessing1 {
   //**************
 
   // problem 8
+  // A function that returns true if any element in a list satisfy a
+  // given predicate.
   // iterative version
-
+  def oneIter[T](test: T=>Boolean, list: List[T]) = {
+    if (list == Nil) true
+    else {
+      var shouldNotContinue = false
+      for (element <- list if !shouldNotContinue)
+        if (test(element)) shouldNotContinue = true
+      shouldNotContinue
+    }
+  }
   // recursive version
-
+  // **No correct recursive version of problem 8 found. The following is incorrect.
+  def oneRecur[T](test: T=>Boolean, list: List[T]) : Boolean = {
+    if (list == Nil) false
+    else test(list.head) || oneRecur(test, list.tail)
+  }
   // tail-recursive version
-
+  def oneTailRecur[T](test: T=>Boolean, list: List[T]) : Boolean = {
+    def helper(result: Boolean, unseen: List[T]) : Boolean = {
+      if (unseen == Nil) result
+      else test(unseen.head) || helper(result, unseen.tail)
+    }
+    helper(false, list)
+  }
   // map-filter-reduce version
+  def oneMapFilterReduce[T](test: T=>Boolean, list: List[T]) = {
+    if (list == Nil) true
+    else list.filter(test).size > 0
+    // Using list.exists(test) will be more succinct but problem requires
+    // map, reduce and filter.
+  }
   // tests:
+  val listAToTestForProb8 = List("daddy", "world", "mom")
+  val listBToTestForProb8 = List("hello", "world", "daddy")
+  val listCToTestForProb8 = List(1,3,4,6,8,10)
+  val listDToTestForProb8 = List(1,3,5,7)
+  oneIter(isPal _, listAToTestForProb8)
+  oneIter(isPal _, listBToTestForProb8)
+  oneIter(isEven _, listCToTestForProb8)
+  oneIter(isEven _, listDToTestForProb8)
+
+  oneRecur(isPal _, listAToTestForProb8)
+  oneRecur(isPal _, listBToTestForProb8)
+  oneRecur(isEven _, listCToTestForProb8)
+  oneRecur(isEven _, listDToTestForProb8)
+
+  oneTailRecur(isPal _, listAToTestForProb8)
+  oneTailRecur(isPal _, listBToTestForProb8)
+  oneTailRecur(isEven _, listCToTestForProb8)
+  oneTailRecur(isEven _, listDToTestForProb8)
+
+  oneMapFilterReduce(isPal _, listAToTestForProb8)
+  oneMapFilterReduce(isPal _, listBToTestForProb8)
+  oneMapFilterReduce(isEven _, listCToTestForProb8)
+  oneMapFilterReduce(isEven _, listDToTestForProb8)
   //**************
 
   // problem 10
@@ -246,7 +295,7 @@ object ListProcessing1 {
   }
   val primes = naturalNumber.filter(isPrime)
 
-//  primes(3)
+  //  primes(3)
   // end of lecture example
   // 3. The stream of all non-negative even integers
   // 4. The stream of all squares of integers
