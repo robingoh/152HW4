@@ -20,20 +20,27 @@ object ListProcessing1 {
       nums.head * nums.head * nums.head + sumOfOddCubesRecur(nums.tail)
     else sumOfOddCubesRecur(nums.tail)
     }
-  }
   // tail-recursive version
   def sumOfOddCubesTailRecur(nums: List[Int]) = {
     def helper(result: Int, unseen: List[Int]) : Int = {
       if (unseen == Nil) result
-      else helper(result + unseen.head * unseen.head * unseen.head, unseen.tail)
+      else if (unseen.head %2 != 0) helper(result + unseen.head * unseen.head * unseen.head, unseen.tail)
+      else helper(result, unseen.tail)
     }
     helper(0, nums)
   }
   // map-filter-reduce version
   def isOdd(n: Int) = if (n % 2 != 0) true else false
-  def sumOfOddCubesMapReduceFilter(nums: List[Int])
-  = nums.filter(isOdd _).map()
-    // tests:
+  def cube(n: Int) = n * n * n
+  def sum(n1: Int, n2: Int) = n1 + n2
+  def sumOfOddCubesMapReduceFilter(nums: List[Int]) = nums.filter(isOdd _).map(cube _).reduce(sum _)
+  // tests:
+  val listToBeCubed = List(1,2,3,4,5,6,7,8,9)
+  sumOfOddCubesIter(listToBeCubed)
+  sumOfOddCubesRecur(listToBeCubed)
+  sumOfOddCubesTailRecur(listToBeCubed)
+  sumOfOddCubesMapReduceFilter(listToBeCubed)
+
   //**************
 
   // problem 2
@@ -142,7 +149,8 @@ object ListProcessing1 {
     }
   }
   val primes = naturalNumber.filter(isPrime)
-  primes(3)
+
+//  primes(3)
   // end of lecture example
   // 3. The stream of all non-negative even integers
   // 4. The stream of all squares of integers
