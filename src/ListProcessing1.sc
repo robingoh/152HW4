@@ -3,7 +3,6 @@ object ListProcessing1 {
   // problem 1,2,6,7,8 implement 4 versions:
   // iterative, recursive, tail-recursive, map-filter-reduce
 
-
   // problem 1
   // A function that computes the sum of cubes of all odd
   // numbers occurring in a list of integers
