@@ -145,35 +145,63 @@ object ListProcessing1 {
 
   // problem 7
   // A function that returns true if all elements
-  // in a lists satisfy a given predicate
+  // in a lists satisfy a given predicate.
   // iterative version
-
+  def allIter[T](test: T=>Boolean, vals: List[T]) = {
+    var result = true
+    for (v <- vals if result)
+      result = result && test(v)
+    result
+  }
   // recursive version
-
+  // ** the intuitive recursive version is the same as the tail-recursive version
+  // ** since the problem requires a recursive version, I have done something
+  // ** to differentiate the recursive and the tail-recursive version. But in the
+  // ** end, allRecur and allTailRecur are both tail-recursive functions.
+  // ** In other words, no recursive version of problem 7 is found.
+  def allRecur[T](test: T=>Boolean, vals: List[T]) : Boolean = {
+    if (vals == Nil) true
+    else test(vals.head) && allRecur(test, vals.tail)
+  }
   // tail-recursive version
-
-  // map-filter-reduce version
   def allTailRecur[T](test: T=>Boolean, vals: List[T]) : Boolean = {
     if (vals == Nil) true
     else if (test(vals.head)) allTailRecur(test, vals.tail)
     else false
+  }
+  // map-filter-reduce version
+  // using vals.count(test) would be more direct, but again, the problem
+  // requires using only map, filter and reduce.
+  def allMapFilterReduce[T](test: T=>Boolean, vals: List[T]) = vals.size == vals.filter(test).size
 
-  }
-  def allIter[T](test: T=>Boolean, vals: List[T]) : Boolean = {
-    var result = true
-    for (v <- vals if result) {
-      result = result && test(v)
-    }
-    result
-  }
+
   // tests:
   def isPal(s: String) = s == s.reverse
   def isEven(n: Int) = n % 2 == 0
-  allTailRecur(isPal, List("mom", "rotator", "dad"))
-  allTailRecur(isEven, List(2,4,6,7))
+  val listAToTestForProb7 = List("mom", "rotator", "dad")
+  val listBToTestForProb7 = List("mom", "rotator", "daddy")
+  val listCToTestForProb7 = List(2,3,4,6,8,10)
+  val listDToTestForProb7 = List(2,4,6,8)
+  allIter(isPal _, listAToTestForProb7)
+  allIter(isPal _, listBToTestForProb7)
+  allIter(isEven _, listCToTestForProb7)
+  allIter(isEven _, listDToTestForProb7)
 
-  allIter(isPal, List("mom", "rotator", "dad"))
-  allIter(isEven, List(2,3,4,6,8,10))
+  allRecur(isPal _, listAToTestForProb7)
+  allRecur(isPal _, listBToTestForProb7)
+  allRecur(isEven _, listCToTestForProb7)
+  allRecur(isEven _, listDToTestForProb7)
+
+  allTailRecur(isPal _, listAToTestForProb7)
+  allTailRecur(isPal _, listBToTestForProb7)
+  allTailRecur(isEven _, listCToTestForProb7)
+  allTailRecur(isEven _, listDToTestForProb7)
+
+  allMapFilterReduce(isPal _, listAToTestForProb7)
+  allMapFilterReduce(isPal _, listBToTestForProb7)
+  allMapFilterReduce(isEven _, listCToTestForProb7)
+  allMapFilterReduce(isEven _, listDToTestForProb7)
+
   //**************
 
   // problem 8
