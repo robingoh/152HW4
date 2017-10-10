@@ -30,7 +30,7 @@ object ListProcessing1 {
     helper(0, nums)
   }
   // map-filter-reduce version
-  def isOdd(n: Int) = if (n % 2 != 0) true else false
+  def isOdd(n: Int) = n % 2 != 0
   def cube(n: Int) = n * n * n
   def sum(n1: Int, n2: Int) = n1 + n2
   def sumOfOddCubesMapReduceFilter(nums: List[Int]) = nums.filter(isOdd _).map(cube _).reduce(sum _)
@@ -78,9 +78,7 @@ object ListProcessing1 {
     for (num <- list) sum += num
     sum
   }
-  def sumOfSumsMapFilterReduce(listOfLists: List[List[Int]]) = {
-    listOfLists.map(sumAllNumInAList _).reduce(sum _)
-  }
+  def sumOfSumsMapFilterReduce(listOfLists: List[List[Int]]) = listOfLists.map(sumAllNumInAList _).reduce(sum _)
   // tests:
   val listOfListsToTest = List( List(1, 2, 3), List(4, 5, 6) )
   sumOfSumsIter(listOfListsToTest)
@@ -92,29 +90,12 @@ object ListProcessing1 {
 
   // problem 3
   // A function that returns the depth of a list of nested lists.
+
   def depthRecur(list: Any) : Int = {
     list match {
       case (first :: rest) => math.max(depthRecur(first) + 1, depthRecur(rest))
       case _ => 0 // not a list so return 0
     }
-  }
-  def depthIter(vals: Any) : Int = {
-
-    var result = 0
-
-    while(vals.isInstanceOf[List[Any]]) {
-//      if (vals.isInstanceOf[List[Any]]) {
-        val valsList = vals.asInstanceOf[List[Any]]
-        for (v <- valsList) {
-          result = math.max(result, depthIter(valsList.head))
-        }
-//      }
-    }
-    result
-  }
-
-  def depthMapFilterReduce(vals: Any) = {
-
   }
 
   // tests:
@@ -123,20 +104,59 @@ object ListProcessing1 {
   //**************
 
   // problem 6
+  // A function that returns the nunmber of elements in a list that satisfy
+  // a given predicate of type T=>Boolean
+  // iterative version
+  def numOfEleSatisfyPredicateIter[T](list: List[T], predicate: T=>Boolean) = {
+    var count = 0
+    for (element <- list)
+      if (predicate(element)) count += 1
+    count
+  }
+  // recursive version
+  def numOfEleSatisfyPredicateRecur[T](list: List[T], predicate: T=>Boolean) : Int = {
+    if (list == Nil) 0
+    else if (predicate(list.head)) 1 + numOfEleSatisfyPredicateRecur(list.tail, predicate)
+    else numOfEleSatisfyPredicateRecur(list.tail, predicate)
+  }
+  // tail-recursive version
+  def numOfEleSatisfyPredicateTailRecur[T](list: List[T], predicate: T=>Boolean) = {
+    def helper(result: Int, unseen: List[T]) : Int = {
+      if (unseen == Nil) result
+      else if (predicate(unseen.head)) helper(result + 1, unseen.tail)
+      else helper(result, unseen.tail)
+    }
+    helper(0, list)
+  }
+  // map-filter-reduce version
+  def numOfEleSatisfyPredicateMapFilterReduce[T](list: List[T], predicate: T=>Boolean) = list.filter(predicate).size
+  // a more succient way is to do list.count(predicate _), but problem requires using map, filter and reduce
+
 
   // tests:
+  def stringConsistOfExactly5Chars(str: String) = str.length == 5
+  var listToTestForProb6 = List("Kodak", "nikon", "goPro", "canon", "Samsung", "iPhone")
+  numOfEleSatisfyPredicateIter(listToTestForProb6, stringConsistOfExactly5Chars _) // expecting: 4
+  numOfEleSatisfyPredicateRecur(listToTestForProb6, stringConsistOfExactly5Chars _) // expecting: 4
+  numOfEleSatisfyPredicateTailRecur(listToTestForProb6, stringConsistOfExactly5Chars _) // expecting: 4
+  numOfEleSatisfyPredicateMapFilterReduce(listToTestForProb6, stringConsistOfExactly5Chars _) // expecting: 4
+
   //**************
 
   // problem 7
   // A function that returns true if all elements
   // in a lists satisfy a given predicate
+  // iterative version
+
+  // recursive version
+
+  // tail-recursive version
+
+  // map-filter-reduce version
   def allTailRecur[T](test: T=>Boolean, vals: List[T]) : Boolean = {
-    if (vals == Nil)
-      true
-    else if (test(vals.head))
-      allTailRecur(test, vals.tail)
-    else
-      false
+    if (vals == Nil) true
+    else if (test(vals.head)) allTailRecur(test, vals.tail)
+    else false
 
   }
   def allIter[T](test: T=>Boolean, vals: List[T]) : Boolean = {
@@ -157,7 +177,13 @@ object ListProcessing1 {
   //**************
 
   // problem 8
+  // iterative version
 
+  // recursive version
+
+  // tail-recursive version
+
+  // map-filter-reduce version
   // tests:
   //**************
 
