@@ -265,42 +265,71 @@ object ListProcessing1 {
   //**************
 
   // problem 10
-
+  // A function that returns true if a given list of Int is sorted
+  def listIsSorted(list: List[Int]) = list == list.sorted
   // tests:
+  val listAToTestForProb10 = List(1,2,3,4,5,6,8,9,10)
+  val listBToTestForProb10 = List(2,8,9,1,4,5,7)
+  listIsSorted(listAToTestForProb10)
+  listIsSorted(listBToTestForProb10)
   //**************
 
   // problem 13
   // 1. An infinitely long stream of 1's
+  def makeInfinite1() : Stream[Int] = 1 #:: makeInfinite1()
+  // test for (1.)
+  val infinite1 = makeInfinite1
+  infinite1
+  infinite1.tail
+  infinite1
+  infinite1.tail.tail
+  infinite1
+  //*****
+
   // 2. The stream of all non-negative integers
   // by reverse recusion
-  def makeNaturalNumber(from: Int) : Stream[Int] =
-  from #:: makeNaturalNumber(from + 1)
+  def makeNaturalNumber(from: Int) : Stream[Int] = from #:: makeNaturalNumber(from + 1)
+  // test for (2.)
   val naturalNumber = makeNaturalNumber(0)
   naturalNumber
   naturalNumber.head
   naturalNumber.tail
   naturalNumber(5)
   naturalNumber // forcing the promise
-  // lecture example
-  def isPrime(n: Int) = {
-    if (n < 2)
-      false
-    else {
-      var result = true
-      for (i <- 2 until n / 2 if result) {
-        result = n % i != 0
-      }
-      result
-    }
-  }
-  val primes = naturalNumber.filter(isPrime)
+  //*****
 
-  //  primes(3)
-  // end of lecture example
   // 3. The stream of all non-negative even integers
+  def makeEvenNonNegInt(from: Int) : Stream[Int] =
+    makeNaturalNumber(from).filter((n: Int) => n % 2 == 0)
+  // test for (3.)
+  val evenNum = makeEvenNonNegInt(3)
+  evenNum
+  evenNum.tail
+  evenNum
+  evenNum.tail.tail
+  evenNum
+
+  //*****
   // 4. The stream of all squares of integers
-  // tests:
+  def makeSquareInteger(from: Int) : Stream[Int] =
+    makeNaturalNumber(from).map((n: Int) => n * n)
+  // test for (4.)
+  val squareIntFromNeg = makeSquareInteger(-5)
+  val squareIntFromPos = makeSquareInteger(3)
+  squareIntFromNeg
+  squareIntFromNeg.tail
+  squareIntFromNeg
+  squareIntFromNeg.tail.tail
+  squareIntFromNeg
+  squareIntFromNeg.tail.tail.tail
+  squareIntFromNeg
+
+  squareIntFromPos
+  squareIntFromPos.tail
+  squareIntFromPos
+  squareIntFromPos.tail.tail
+  squareIntFromPos
+  squareIntFromPos.tail.tail.tail
+  squareIntFromPos
   //**************
-
-
 }
